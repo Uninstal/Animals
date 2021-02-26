@@ -1,0 +1,6 @@
+name: ARKAnimals
+main: org.uninstal.ark.animals.Main
+depend: [ARKClans]
+version: 1.0
+commands:
+  mobs:
