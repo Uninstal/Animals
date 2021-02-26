@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.uninstal.ark.animals.commands.AbstractCommand;
 import org.uninstal.ark.animals.commands.MobsGive;
 import org.uninstal.ark.animals.commands.MobsList;
-import org.uninstal.ark.animals.data.ARKAnimalsManager;
+import org.uninstal.ark.animals.data.AnimalsManager;
 import org.uninstal.ark.animals.db.Database;
 import org.uninstal.ark.animals.db.Operator;
 import org.uninstal.ark.animals.util.Values;
@@ -43,8 +43,9 @@ public class Main extends JavaPlugin {
 			v.read();
 			
 			//Manager
-			new ARKAnimalsManager();
+			new AnimalsManager();
 			
+			//Database
 			Database db = new Database(Values.HOST, Values.BASE, Values.USER, Values.PASS);
 			this.operator = new Operator(db);
 			
@@ -60,12 +61,15 @@ public class Main extends JavaPlugin {
 			
 			this.operator.load();
 			
+			//Vault-permissions
 			RegisteredServiceProvider<Permission> reg = 
 			Bukkit.getServicesManager().getRegistration(Permission.class);
 			if(reg != null) this.permission = reg.getProvider();
 			
+			//Register events
 			Bukkit.getPluginManager().registerEvents(new Handler(), this);
 			
+			//Commands
 			this.commands.put("mobs list", new MobsList());
 			this.commands.put("mobs give", new MobsGive());
 			
@@ -88,17 +92,22 @@ public class Main extends JavaPlugin {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
+		//Main commands /mobs and /dragon
 		if(command.getName().equalsIgnoreCase("mobs")
 				|| command.getName().equalsIgnoreCase("dragon")) {
 			
+			//Out information of commands
 			if(args.length == 0) 
 				sender.sendMessage(Values.INFO);
 			
 			else{
 				
+				//Entry: /command <arg0>
 				String entry = command.getName() + " " + args[0];
+				//Registered command from entry
 				AbstractCommand cmd = commands.get(entry);
 				
+				//Check and run
 				if(cmd == null) sender.sendMessage(Values.INFO);
 				else cmd.run(sender, args);
 				
