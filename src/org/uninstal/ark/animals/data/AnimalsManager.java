@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.uninstal.ark.animals.data.map.DoubleKeysHashMap;
 import org.uninstal.ark.animals.util.Utils;
 import org.uninstal.ark.clans.data.ARKClan;
 import org.uninstal.ark.clans.data.ARKClansManager;
@@ -15,17 +16,17 @@ import org.uninstal.ark.clans.data.ARKUser;
 
 public class AnimalsManager {
 
+	private static DoubleKeysHashMap<UUID, AnimalTamedDragon> dragons = new DoubleKeysHashMap<>();
 	private static Map<UUID, AnimalTamedDefault> tamed_def = new HashMap<>();
-	private static Map<UUID, AnimalTamedDragon> tamed_dragon = new HashMap<>();
 	private static Map<UUID, AnimalNonTamed> non_tamed = new HashMap<>();
 	
 	public static boolean isTame(UUID animal) {
 		return !tamed_def.containsKey(animal) 
-				&& !tamed_dragon.containsKey(animal);
+				&& !dragons.containsKey(animal);
 	}
 	
 	public static boolean isDragon(UUID animal) {
-		return tamed_dragon.containsKey(animal);
+		return dragons.containsKey(animal);
 	}
 	
 	public static AnimalNonTamed getNonTamedAnimal(UUID animal) {
@@ -37,7 +38,11 @@ public class AnimalsManager {
 	}
 	
 	public static AnimalTamedDragon getDragon(UUID animal) {
-		return tamed_dragon.get(animal);
+		return dragons.getValueFromKey1(animal);
+	}
+	
+	public static AnimalTamedDragon getDragonOwned(UUID owner) {
+		return dragons.getValueFromKey2(owner);
 	}
 	
 	public static void add(AnimalNonTamed a) {
@@ -45,7 +50,7 @@ public class AnimalsManager {
 	}
 	
 	public static void add(AnimalTamedDragon a) {
-		tamed_dragon.put(a.getEntityId(), a);
+		dragons.put(a.getEntityId(), a.getOwner(), a);
 	}
 	
 	public static void add(AnimalTamedDefault a) {
@@ -61,7 +66,7 @@ public class AnimalsManager {
 	}
 	
 	public static void delete(AnimalTamedDragon o) {
-		tamed_dragon.remove(o.getOwner());
+		dragons.remove(o.getEntityId(), o.getOwner());
 	}
 	
 	public static Collection<AnimalTamedDefault> getTamedDefault() {
@@ -76,7 +81,7 @@ public class AnimalsManager {
 		
 		List<Animal> animals = new ArrayList<>();
 		animals.addAll(tamed_def.values());
-		animals.addAll(tamed_dragon.values());
+		animals.addAll(dragons.values());
 		
 		return animals;
 	}
@@ -85,7 +90,7 @@ public class AnimalsManager {
 		
 		List<Animal> animals = new ArrayList<>();
 		animals.addAll(tamed_def.values());
-		animals.addAll(tamed_dragon.values());
+		animals.addAll(dragons.values());
 		
 		return  animals
 				.stream()
@@ -97,7 +102,7 @@ public class AnimalsManager {
 		
 		List<Animal> animals = new ArrayList<>();
 		animals.addAll(tamed_def.values());
-		animals.addAll(tamed_dragon.values());
+		animals.addAll(dragons.values());
 		
 		return (int) animals
 				.stream()

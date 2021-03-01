@@ -6,6 +6,10 @@ import org.uninstal.ark.animals.data.gui.AnimalListGui;
 
 public class MobsList extends AbstractCommand {
 
+	public MobsList(int minArgs) {
+		super(minArgs);
+	}
+
 	@Override
 	public void run(CommandSender sender, String[] args) {
 		

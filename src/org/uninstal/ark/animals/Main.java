@@ -10,6 +10,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.uninstal.ark.animals.commands.AbstractCommand;
+import org.uninstal.ark.animals.commands.DragonAccept;
+import org.uninstal.ark.animals.commands.DragonInfo;
+import org.uninstal.ark.animals.commands.DragonKill;
+import org.uninstal.ark.animals.commands.DragonTp;
 import org.uninstal.ark.animals.commands.MobsGive;
 import org.uninstal.ark.animals.commands.MobsList;
 import org.uninstal.ark.animals.data.AnimalsManager;
@@ -70,8 +74,14 @@ public class Main extends JavaPlugin {
 			Bukkit.getPluginManager().registerEvents(new Handler(), this);
 			
 			//Commands
-			this.commands.put("mobs list", new MobsList());
-			this.commands.put("mobs give", new MobsGive());
+			this.commands.put("mobs list", new MobsList(1));
+			this.commands.put("mobs give", new MobsGive(2));
+			this.commands.put("dragon accept", new DragonAccept(1));
+			this.commands.put("dragon info", new DragonInfo(1));
+			this.commands.put("dragon kill", new DragonKill(1));
+			this.commands.put("dragon tp", new DragonTp(1));
+			this.commands.put("dragon trade", new DragonAccept(2));
+			this.commands.put("dragon get", new DragonAccept(1));
 			
 		} catch (Exception e) {
 			

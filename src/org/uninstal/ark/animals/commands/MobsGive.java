@@ -9,6 +9,10 @@ import org.uninstal.ark.animals.util.Utils;
 
 public class MobsGive extends AbstractCommand {
 
+	public MobsGive(int minArgs) {
+		super(minArgs);
+	}
+
 	@Override
 	public void run(CommandSender sender, String[] args) {
 		

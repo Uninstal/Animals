@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.uninstal.ark.animals.data.Animal;
 import org.uninstal.ark.animals.data.AnimalTamedDragon;
 import org.uninstal.ark.animals.data.AnimalsManager;
 
@@ -27,18 +26,10 @@ public class DragonGet extends AbstractCommand {
 		Player player = (Player) sender;
 		UUID uuid = player.getUniqueId();
 		
-		for(Animal animal : AnimalsManager
-				.getTamedAnimals(uuid)) {
-			
-			if(animal instanceof AnimalTamedDragon) {
-				
-				((AnimalTamedDragon) animal)
-				.get();
-				return;
-			}
-		}
+		AnimalTamedDragon dragon = AnimalsManager.getDragonOwned(uuid);
+		if(dragon == null) sender.sendMessage("§cУ вас нет дракона.");
+		else dragon.get();
 		
-		sender.sendMessage("§cУ вас нет дракона.");
 		return;
 	}
 }

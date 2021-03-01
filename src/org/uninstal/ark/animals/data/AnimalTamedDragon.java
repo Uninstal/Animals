@@ -1,5 +1,7 @@
 package org.uninstal.ark.animals.data;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -9,10 +11,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.uninstal.ark.animals.Main;
+import org.uninstal.ark.animals.data.abilities.Ability;
 import org.uninstal.ark.animals.util.Utils;
 import org.uninstal.ark.animals.util.Values;
 
 public class AnimalTamedDragon implements Animal {
+	
+	private List<Ability> abilities;
 	
 	private Entity entity;
 	private UUID owner;
@@ -20,6 +25,7 @@ public class AnimalTamedDragon implements Animal {
 
 	public AnimalTamedDragon(Entity entity, UUID owner) {
 		
+		this.abilities = new ArrayList<>();
 		this.entity = entity;
 		this.owner = owner;
 		this.randomLevel();
@@ -151,5 +157,9 @@ public class AnimalTamedDragon implements Animal {
 		
 		LivingEntity entity = (LivingEntity) this.entity;
 		entity.damage(entity.getHealth());
+	}
+	
+	public List<Ability> getAbilities() {
+		return abilities;
 	}
 }

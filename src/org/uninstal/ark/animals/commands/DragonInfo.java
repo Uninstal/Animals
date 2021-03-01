@@ -1,8 +1,6 @@
 package org.uninstal.ark.animals.commands;
 
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -24,21 +22,11 @@ public class DragonInfo extends AbstractCommand {
 		Player player = (Player) sender;
 		UUID uuid = player.getUniqueId();
 		
-		List<AnimalTamedDragon> dragons = AnimalsManager.getTamedAnimals(uuid)
-				.stream()
-				.filter(a -> a instanceof AnimalTamedDragon)
-				.map(a -> (AnimalTamedDragon) a)
-				.collect(Collectors.toList());
-		
-		if(dragons.size() == 0) {
-			
-			player.sendMessage("Dragons amount: 0");
-			return;
-		}
+		AnimalTamedDragon dragon = AnimalsManager.getDragonOwned(uuid);
+		if(dragon == null) sender.sendMessage("§cУ вас нет дракона.");
 		
 		else {
 			
-			AnimalTamedDragon dragon = dragons.get(0);
 			int level = dragon.getLevel();
 			
 			//Месторасположение дракона
