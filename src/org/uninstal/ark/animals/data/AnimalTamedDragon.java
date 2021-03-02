@@ -6,6 +6,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -18,6 +19,7 @@ import org.uninstal.ark.animals.data.abilities.AbilityBreak;
 import org.uninstal.ark.animals.data.abilities.AbilityDamage;
 import org.uninstal.ark.animals.data.abilities.AbilityEffect;
 import org.uninstal.ark.animals.data.abilities.AbilityHealth;
+import org.uninstal.ark.animals.data.abilities.AbilityType;
 import org.uninstal.ark.animals.util.Utils;
 import org.uninstal.ark.animals.util.Values;
 
@@ -35,6 +37,7 @@ public class AnimalTamedDragon implements Animal {
 		this.entity = entity;
 		this.owner = owner;
 		this.randomLevel();
+		this.generateAbilities();
 	}
 	
 	public AnimalTamedDragon(Entity entity, UUID owner, int level) {
@@ -165,6 +168,25 @@ public class AnimalTamedDragon implements Animal {
 		entity.damage(entity.getHealth());
 	}
 	
+	public void generateAbilities() {
+		int count = Math.min(3, level % 5 + 1);
+		
+		while(abilities.size() < count) {
+			
+			AbilityType[] types = AbilityType.values();
+			AbilityType type = types[Utils.random(1, types.length) - 1];
+			
+			if(type == AbilityType.BREAK) abilities.add(new AbilityBreak());
+			if(type == AbilityType.DAMAGE) abilities.add(new AbilityDamage());
+			if(type == AbilityType.HEALTH) abilities.add(new AbilityHealth());
+			
+			if(type == AbilityType.EFFECT) abilities.add(new AbilityEffect(
+					Values.EFFECTS_TYPES_BOOSTS
+					.get(Utils.random(1, Values.EFFECTS_TYPES_BOOSTS
+					.size()) - 1)));
+		}
+	}
+	
 	public List<Ability> getAbilities() {
 		return abilities;
 	}
@@ -190,5 +212,14 @@ public class AnimalTamedDragon implements Animal {
 			
 			continue;
 		}
+	}
+	
+	public boolean isNearby() {
+		
+		Player player = Bukkit.getPlayer(owner);
+		if(player == null) return false;
+		
+		Location location = player.getLocation();
+		return entity.getLocation().distance(location) < 50.0;
 	}
 }

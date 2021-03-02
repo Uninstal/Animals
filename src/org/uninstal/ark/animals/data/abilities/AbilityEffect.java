@@ -6,10 +6,6 @@ import org.bukkit.potion.PotionEffectType;
 public class AbilityEffect extends Ability {
 	
 	private PotionEffect effect;
-
-	public AbilityEffect() {
-		super(true);
-	}
 	
 	public AbilityEffect(PotionEffectType effectType) {
 		super(true);

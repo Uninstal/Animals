@@ -26,7 +26,7 @@ public class AbilityBreak extends Ability {
 
 	@Override
 	public Object getValue() {
-		return Values.SPEED_BOOSTS.get(boost);
+		return Values.BREAK_BOOSTS.get(boost);
 	}
 	
 	@Override

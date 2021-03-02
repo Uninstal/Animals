@@ -1,6 +1,7 @@
 package org.uninstal.ark.animals.data.abilities;
 
 import org.uninstal.ark.animals.util.Utils;
+import org.uninstal.ark.animals.util.Values;
 
 public class AbilityDamage extends Ability {
 
@@ -25,7 +26,7 @@ public class AbilityDamage extends Ability {
 
 	@Override
 	public Object getValue() {
-		return damage;
+		return Values.DAMAGE_BOOSTS.get(damage);
 	}
 	
 	@Override

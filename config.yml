@@ -25,6 +25,35 @@ settings:
     vip: 3
     prem: 4
     admin: 10
+  
+  #Способности дракона
+  abilities:
+    
+    #Разрушаемость
+    break:
+      1: 2
+      2: 5
+      3: 10
+    
+    #Буст здоровья
+    health:
+      1: 2.0
+      2: 10.0
+      3: 20.0
+      
+    #Буст урона
+    damage:
+      1: 1
+      2: 2
+      3: 3
+    
+    #Эффекты
+    effects:
+      - 'DAMAGE_RESISTANCE'
+      - 'JUMP'
+      - 'INCREASE_DAMAGE'
+      - 'SPEED'
+      - 'WATER_BREATHING'
     
 #Сообщения
 messages:

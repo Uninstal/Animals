@@ -1,10 +1,13 @@
 package org.uninstal.ark.animals.util;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.potion.PotionEffectType;
 import org.uninstal.ark.animals.data.tame.CrackShotTame;
 import org.uninstal.ark.animals.data.tame.DefaultTame;
 import org.uninstal.ark.animals.data.tame.EnderDragonTame;
@@ -85,8 +88,10 @@ public class Values {
 	
 	public static Material TOTEM;
 	
-	public static Map<Integer, Integer> SPEED_BOOSTS = new HashMap<>();
+	public static Map<Integer, Integer> BREAK_BOOSTS = new HashMap<>();
+	public static Map<Integer, Integer> DAMAGE_BOOSTS = new HashMap<>();
 	public static Map<Integer, Double> HEALTH_BOOSTS = new HashMap<>();
+	public static List<PotionEffectType> EFFECTS_TYPES_BOOSTS = new ArrayList<>();
 	
 	public static Map<String, Material> EATS = new HashMap<>();
 	public static Map<String, TameProcess> TAMES = new HashMap<>();
