@@ -1,9 +1,7 @@
-package org.uninstal.ark.animals;
+package org.uninstal.ark.animals.handlers;
 
-import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -18,19 +16,16 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.uninstal.ark.animals.Main;
 import org.uninstal.ark.animals.data.AnimalNonTamed;
 import org.uninstal.ark.animals.data.AnimalTamedDefault;
 import org.uninstal.ark.animals.data.AnimalTamedDragon;
 import org.uninstal.ark.animals.data.AnimalsManager;
-import org.uninstal.ark.animals.data.abilities.Ability;
-import org.uninstal.ark.animals.data.abilities.AbilityType;
 import org.uninstal.ark.animals.data.gui.AnimalEggGui;
 import org.uninstal.ark.animals.data.gui.Gui;
 import org.uninstal.ark.animals.util.Values;
-import org.uninstal.ark.raids.events.BlockDamageEvent;
 
 public class Handler implements Listener {
 
@@ -54,50 +49,6 @@ public class Handler implements Listener {
 				}
 			}
 		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	@EventHandler
-	public void healthBonus(PlayerMoveEvent e) {
-		
-		Player player = e.getPlayer();
-		Location location = player.getLocation();
-		
-		AnimalTamedDragon animal = AnimalsManager.getDragonOwned(player.getUniqueId());
-		if(animal == null) return;
-		
-		Entity entity = animal.getEntity();
-		if(entity.getLocation().distance(location) > 50) return;
-		
-		List<Ability> abilities = animal.getAbilities();
-		for(Ability ability : abilities) {
-			
-			if(ability.getType() == AbilityType.HealthBonus)
-				player.setMaxHealth(player.getMaxHealth() 
-						+ (double) ability.run(animal));
-		}
-	}
-	
-	@EventHandler
-	public void blockDamage(BlockDamageEvent e) {
-		
-		Player player = e.getDamager();
-		Location location = player.getLocation();
-		
-		AnimalTamedDragon animal = AnimalsManager.getDragonOwned(player.getUniqueId());
-		if(animal == null) return;
-		
-		Entity entity = animal.getEntity();
-		if(entity.getLocation().distance(location) > 50) return;
-		
-		List<Ability> abilities = animal.getAbilities();
-		for(Ability ability : abilities) {
-			
-			if(ability.getType() == AbilityType.BreakingSpeed)
-				e.setDamage(e.getDamage() * (int) ability.run(animal));
-		}
-		
-		return;
 	}
 	
 	@EventHandler

@@ -3,15 +3,21 @@ package org.uninstal.ark.animals.data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.uninstal.ark.animals.Main;
 import org.uninstal.ark.animals.data.abilities.Ability;
+import org.uninstal.ark.animals.data.abilities.AbilityBreak;
+import org.uninstal.ark.animals.data.abilities.AbilityDamage;
+import org.uninstal.ark.animals.data.abilities.AbilityEffect;
+import org.uninstal.ark.animals.data.abilities.AbilityHealth;
 import org.uninstal.ark.animals.util.Utils;
 import org.uninstal.ark.animals.util.Values;
 
@@ -161,5 +167,28 @@ public class AnimalTamedDragon implements Animal {
 	
 	public List<Ability> getAbilities() {
 		return abilities;
+	}
+	
+	public String hashAbilities() {
+		return String.join(";", abilities
+				.stream()
+				.map(a -> a.toString())
+				.collect(Collectors.toList()))
+				.trim();
+	}
+	
+	public void setAbilities(String hash) {
+		
+		for(String h : hash.split(";")) {
+			String[] h2 = h.split(":");
+			
+			if(h2[0].equalsIgnoreCase("break")) abilities.add(new AbilityBreak(Integer.parseInt(h2[1])));
+			if(h2[0].equalsIgnoreCase("damage")) abilities.add(new AbilityDamage(Integer.parseInt(h2[1])));
+			if(h2[0].equalsIgnoreCase("health")) abilities.add(new AbilityHealth(Integer.parseInt(h2[1])));
+			if(h2[0].equalsIgnoreCase("break")) abilities.add(new AbilityEffect(PotionEffectType
+					.getByName(h2[1].toUpperCase())));
+			
+			continue;
+		}
 	}
 }

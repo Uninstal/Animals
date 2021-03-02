@@ -85,6 +85,9 @@ public class Values {
 	
 	public static Material TOTEM;
 	
+	public static Map<Integer, Integer> SPEED_BOOSTS = new HashMap<>();
+	public static Map<Integer, Double> HEALTH_BOOSTS = new HashMap<>();
+	
 	public static Map<String, Material> EATS = new HashMap<>();
 	public static Map<String, TameProcess> TAMES = new HashMap<>();
 	public static Map<String, Integer> COOLDOWNS = new HashMap<>();

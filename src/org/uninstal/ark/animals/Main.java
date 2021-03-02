@@ -19,6 +19,8 @@ import org.uninstal.ark.animals.commands.MobsList;
 import org.uninstal.ark.animals.data.AnimalsManager;
 import org.uninstal.ark.animals.db.Database;
 import org.uninstal.ark.animals.db.Operator;
+import org.uninstal.ark.animals.handlers.AbilityHandler;
+import org.uninstal.ark.animals.handlers.Handler;
 import org.uninstal.ark.animals.util.Values;
 
 import net.milkbowl.vault.permission.Permission;
@@ -72,6 +74,7 @@ public class Main extends JavaPlugin {
 			
 			//Register events
 			Bukkit.getPluginManager().registerEvents(new Handler(), this);
+			Bukkit.getPluginManager().registerEvents(new AbilityHandler(), this);
 			
 			//Commands
 			this.commands.put("mobs list", new MobsList(1));

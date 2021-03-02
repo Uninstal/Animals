@@ -1,11 +1,17 @@
 package org.uninstal.ark.animals.data.abilities;
 
-import org.uninstal.ark.animals.data.Animal;
+public abstract class Ability {
+	
+	private boolean intersectionable;
 
-public interface Ability {
-
-	public int getLevel();
-	public AbilityType getType();
-	public String getDisplayName();
-	public Object run(Animal animal);
+	public Ability(boolean intersectionable) {
+		this.intersectionable = intersectionable;
+	}
+	
+	public boolean isIntersectionable() {
+		return intersectionable;
+	}
+	
+	public abstract AbilityType getType();
+	public abstract Object getValue();
 }

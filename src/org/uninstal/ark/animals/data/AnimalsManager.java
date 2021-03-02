@@ -77,6 +77,10 @@ public class AnimalsManager {
 		return non_tamed.values();
 	}
 	
+	public static Collection<AnimalTamedDragon> getDragons() {
+		return dragons.values();
+	}
+	
 	public static List<Animal> getTamedAnimals(){
 		
 		List<Animal> animals = new ArrayList<>();
