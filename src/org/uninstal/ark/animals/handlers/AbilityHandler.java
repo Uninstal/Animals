@@ -26,6 +26,7 @@ public class AbilityHandler implements Listener {
 		if(damager.getType() != EntityType.PLAYER) return;
 		
 		Player player = (Player) damager;
+		int damage = 0;
 		
 		AnimalTamedDragon animal = AnimalsManager.getDragonOwned(player.getUniqueId());
 		if(animal == null || !animal.isNearby()) return;
@@ -34,8 +35,10 @@ public class AbilityHandler implements Listener {
 		for(Ability ability : abilities) {
 			
 			if(ability.getType() == AbilityType.DAMAGE)
-				e.setDamage(e.getDamage() + (int) ability.getValue());
+				damage += (int) ability.getValue();
 		}
+		
+		e.setDamage(damage);
 	}
 	
 	@EventHandler
@@ -74,22 +77,28 @@ public class AbilityHandler implements Listener {
 	@EventHandler
 	public void abilityHealth(PlayerMoveEvent e) {
 		Player player = e.getPlayer();
+		double incHealth = 0.0;
 		
-		AnimalTamedDragon animal = AnimalsManager.getDragonOwned(player.getUniqueId());
-		if(animal == null || !animal.isNearby()) return;
+		AnimalTamedDragon animal = AnimalsManager
+		.getDragonOwned(player.getUniqueId());
 		
-		List<Ability> abilities = animal.getAbilities();
-		for(Ability ability : abilities) {
+		if(animal != null && animal.isNearby()) {
 			
-			if(ability.getType() == AbilityType.HEALTH)
-				player.setMaxHealth(player.getMaxHealth() 
-						+ (double) ability.getValue());
+			List<Ability> abilities = animal.getAbilities();
+			for(Ability ability : abilities) {
+				
+				if(ability.getType() == AbilityType.HEALTH)
+					incHealth += (double) ability.getValue();
+			}
 		}
+		
+		player.setMaxHealth(20.0 + incHealth);
 	}
 	
 	@EventHandler
 	public void abilityBreak(BlockDamageEvent e) {
 		Player player = e.getDamager();
+		int damage = e.getDamage();
 		
 		AnimalTamedDragon animal = AnimalsManager.getDragonOwned(player.getUniqueId());
 		if(animal == null || animal.isNearby()) return;
@@ -98,9 +107,10 @@ public class AbilityHandler implements Listener {
 		for(Ability ability : abilities) {
 			
 			if(ability.getType() == AbilityType.BREAK)
-				e.setDamage(e.getDamage() * (int) ability.getValue());
+				damage *= (int) ability.getValue();
 		}
 		
+		e.setDamage(damage);
 		return;
 	}
 }

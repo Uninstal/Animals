@@ -39,8 +39,31 @@ public class Values {
 		GIVE = config.getString("messages.give").replace("&", "§");
 		INFO = config.getString("messages.info").replace("&", "§");
 		
+		TOTEM = Material.valueOf(config.getString("settings.totem").toUpperCase());
+		
 		WEAPONS = readSubMap(animals, "", "weapon");
 		LIMITS = readMap(config, "settings.limits");
+		
+		config.getConfigurationSection("settings.abilities.break").getKeys(false).forEach(k -> {
+			
+			int value = config.getInt("settings.abilities.break." + k);
+			BREAK_BOOSTS.put(Integer.valueOf(k), value);
+		});
+		
+		config.getConfigurationSection("settings.abilities.damage").getKeys(false).forEach(k -> {
+			
+			int value = config.getInt("settings.abilities.damage." + k);
+			DAMAGE_BOOSTS.put(Integer.valueOf(k), value);
+		});
+		
+		config.getConfigurationSection("settings.abilities.health").getKeys(false).forEach(k -> {
+			
+			double value = config.getDouble("settings.abilities.health." + k);
+			HEALTH_BOOSTS.put(Integer.valueOf(k), value);
+		});
+		
+		config.getStringList("settings.abilities.effects").forEach(t -> 
+		EFFECTS_TYPES_BOOSTS.add(PotionEffectType.getByName(t.toUpperCase())));
 		
 		Map<String, String> types = readSubMap(animals, "", "type");
 		types.forEach((k, v) -> {

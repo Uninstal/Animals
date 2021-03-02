@@ -131,17 +131,27 @@ public class Handler implements Listener {
 		
 		Entity entity = e.getEntity();
 		UUID animal = entity.getUniqueId();
+		boolean delete = false;
 		
 		AnimalNonTamed a = AnimalsManager.getNonTamedAnimal(animal);
-		if(a != null) AnimalsManager.delete(a);
+		if(a != null) {
+			AnimalsManager.delete(a);
+			delete = true;
+		}
 		
 		AnimalTamedDefault a2 = AnimalsManager.getAnimal(animal);
-		if(a2 != null) AnimalsManager.delete(a2);
+		if(a2 != null) {
+			AnimalsManager.delete(a2);
+			delete = true;
+		}
 		
 		AnimalTamedDragon a3 = AnimalsManager.getDragon(animal);
-		if(a3 != null) AnimalsManager.delete(a3);
+		if(a3 != null) {
+			AnimalsManager.delete(a3);
+			delete = true;
+		}
 		
-		System.out.println("Entity " + entity.getType().name() + " deleted.");
+		if(delete) System.out.println("Entity " + entity.getType().name() + " deleted.");
 		return;
 	}
 	
@@ -155,6 +165,14 @@ public class Handler implements Listener {
 				&& b.getType() == Material.DRAGON_EGG) {
 			
 			Player player = e.getPlayer();
+			AnimalTamedDragon dragon = AnimalsManager.getDragonOwned(player.getUniqueId());
+			
+			if(dragon != null) {
+				
+				player.sendMessage("§cВы уже имеете дракона!");
+				return;
+			}
+					
 			AnimalEggGui gui = new AnimalEggGui(player);
 			
 			gui.setEgg(b.getLocation());

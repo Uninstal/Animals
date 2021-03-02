@@ -25,6 +25,9 @@ settings:
     vip: 3
     prem: 4
     admin: 10
+    
+  #Блок тотема
+  totem: 'DIAMOND_BLOCK'
   
   #Способности дракона
   abilities:

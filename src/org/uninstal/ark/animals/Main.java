@@ -55,6 +55,13 @@ public class Main extends JavaPlugin {
 			Database db = new Database(Values.HOST, Values.BASE, Values.USER, Values.PASS);
 			this.operator = new Operator(db);
 			
+			db.createTable(Operator.table_tamed_dragons,
+					"animal VARCHAR(36) PRIMARY KEY",
+					"owner VARCHAR(36)",
+					"level INT",
+					"baby BOOL",
+					"abilities TEXT");
+			
 			db.createTable(Operator.table_tamed_animals, 
 					"animal VARCHAR(36) PRIMARY KEY",
 					"owner VARCHAR(36)",
@@ -122,6 +129,7 @@ public class Main extends JavaPlugin {
 				
 				//Check and run
 				if(cmd == null) sender.sendMessage(Values.INFO);
+				else if(cmd.getMinArgs() > args.length) sender.sendMessage(Values.INFO);
 				else cmd.run(sender, args);
 				
 				return false;

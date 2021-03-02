@@ -4,3 +4,4 @@ depend: [ARKClans]
 version: 1.0
 commands:
   mobs:
+  dragon:

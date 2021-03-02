@@ -93,7 +93,7 @@ public class AnimalEggGui implements Gui {
 				curr.setAmount(curr.getAmount() - 1);
 				
 				EnderDragonTame tame = (EnderDragonTame) Values.TAMES.get("dragon");
-				tame.updateTame(player, loc, tame.progresses.getOrDefault(loc, 0) + 1);
+				tame.updateTame(player, loc, tame.progresses.getOrDefault(loc, 0) + 50);
 				
 				cooldowns.put(loc, System.currentTimeMillis() + Values.COOLDOWNS.get("dragon") * 1000);
 				return;
@@ -106,7 +106,7 @@ public class AnimalEggGui implements Gui {
 	public void close(InventoryCloseEvent e) {
 		
 		ItemStack curr = inventory.getItem(4);
-		if(curr != null) loc.getWorld().dropItem(loc, curr);
+		if(curr != null) loc.getWorld().dropItem(loc.add(0.0, 1.0, 0.0), curr);
 		
 		if(open) guis.remove(uuid);
 	}

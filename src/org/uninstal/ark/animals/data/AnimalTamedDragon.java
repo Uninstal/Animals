@@ -41,7 +41,8 @@ public class AnimalTamedDragon implements Animal {
 	}
 	
 	public AnimalTamedDragon(Entity entity, UUID owner, int level) {
-		
+
+		this.abilities = new ArrayList<>();
 		this.entity = entity;
 		this.owner = owner;
 		this.level = level;
@@ -169,7 +170,7 @@ public class AnimalTamedDragon implements Animal {
 	}
 	
 	public void generateAbilities() {
-		int count = Math.min(3, level % 5 + 1);
+		int count = Math.min(3, level / 5 + 1);
 		
 		while(abilities.size() < count) {
 			
@@ -203,11 +204,15 @@ public class AnimalTamedDragon implements Animal {
 		
 		for(String h : hash.split(";")) {
 			String[] h2 = h.split(":");
-			
-			if(h2[0].equalsIgnoreCase("break")) abilities.add(new AbilityBreak(Integer.parseInt(h2[1])));
-			if(h2[0].equalsIgnoreCase("damage")) abilities.add(new AbilityDamage(Integer.parseInt(h2[1])));
-			if(h2[0].equalsIgnoreCase("health")) abilities.add(new AbilityHealth(Integer.parseInt(h2[1])));
-			if(h2[0].equalsIgnoreCase("break")) abilities.add(new AbilityEffect(PotionEffectType
+			System.out.println(h);
+			if(h2[0].equalsIgnoreCase("break")) 
+				abilities.add(new AbilityBreak(Integer.parseInt(h2[1])));
+			if(h2[0].equalsIgnoreCase("damage")) 
+				abilities.add(new AbilityDamage(Integer.parseInt(h2[1])));
+			if(h2[0].equalsIgnoreCase("health")) 
+				abilities.add(new AbilityHealth(Integer.parseInt(h2[1])));
+			if(h2[0].equalsIgnoreCase("effect")) 
+				abilities.add(new AbilityEffect(PotionEffectType
 					.getByName(h2[1].toUpperCase())));
 			
 			continue;

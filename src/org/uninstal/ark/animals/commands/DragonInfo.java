@@ -1,6 +1,8 @@
 package org.uninstal.ark.animals.commands;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -8,6 +10,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.uninstal.ark.animals.data.AnimalTamedDragon;
 import org.uninstal.ark.animals.data.AnimalsManager;
+import org.uninstal.ark.animals.data.abilities.Ability;
 
 public class DragonInfo extends AbstractCommand {
 
@@ -39,12 +42,20 @@ public class DragonInfo extends AbstractCommand {
 			LivingEntity livingEntity = (LivingEntity) dragon.getEntity();
 			int health = (int) livingEntity.getHealth();
 			int maxHealth = (int) livingEntity.getMaxHealth();
+			
+			//Способности дракона
+			List<Ability> abilities = dragon.getAbilities();
+			String join = String.join(", ", abilities
+					.stream()
+					.map(a -> a.getType().name() + ":" + a.getValue())
+					.collect(Collectors.toList()));
 
 			sender.sendMessage("");
-			sender.sendMessage("&dDragon:");
+			sender.sendMessage("§dDragon:");
 			sender.sendMessage("Location: " + x + " " + y + " " + z);
 			sender.sendMessage("Health: " + health + "/" + maxHealth);
 			sender.sendMessage("Level: " + level);
+			sender.sendMessage("§1Abilities: §f" + join);
 			sender.sendMessage("");
 			
 			return;
