@@ -41,13 +41,16 @@ public class DefaultTame extends TameProcess {
 		}
 		
 		int newProgress = animal.getProgress() + 1;
-		
-		if(newProgress >= animal.getNeedEatAmount()) endTame(e, animal);
+		if(newProgress >= animal.getNeedEatAmount()) {
+			endTame(e, animal);
+			return;
+		}
 		else animal.setProgress(newProgress);
 		
 		long c = System.currentTimeMillis() + Values.COOLDOWNS.get(type) * 1000;
 		cooldowns.put(u, c);
 		
+		animal.updateDisplayName();
 		return;
 	}
 

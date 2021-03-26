@@ -28,4 +28,7 @@ public class AbilityEffect extends Ability {
 	public String toString() {
 		return "effect:" + effect.getType().getName();
 	}
+
+	@Override
+	public String toBoostKey() { return toString(); }
 }

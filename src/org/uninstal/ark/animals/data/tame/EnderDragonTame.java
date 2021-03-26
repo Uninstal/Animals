@@ -53,13 +53,14 @@ public class EnderDragonTame extends TameProcess {
 				Location location = (Location) objects[1];
 				location.getBlock().setType(Material.AIR);
 				
-				EnderDragon eg = location.getWorld().spawn(location, EnderDragon.class);
+				EnderDragon eg = location.getWorld().spawn(location.clone().add(0D, 3D, 0D), EnderDragon.class);
 				eg.setAI(false);
 				eg.setGravity(false);
 				
 				AnimalTamedDragon a = new AnimalTamedDragon(eg, player.getUniqueId());
 				AnimalsManager.add(a);
 				
+				progresses.remove(location);
 				return;
 			}
 			

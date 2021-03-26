@@ -65,11 +65,13 @@ messages:
   info: |-
     &r &r
     &r &c/mobs list &7- список прирученных животных.
+    &r &c/mobs pair &7- скрестить питомцев.
     &r &c/mobs give <nick> &7- передать питомца игроку.
+    &r &c/mobs nick <newnick> &7- переименовать питомца.
     &r &r
     &r &c/dragon info &7- информация о драконе.
     &r &c/dragon kill &7- убить дракона.
-    &r &c/dragon trage <nick> &7- обменять дракона.
+    &r &c/dragon trade <nick> &7- обменять дракона.
     &r &c/dragon tp &7- телепортация к дракону.
     &r &c/dragon get &7- переместить дракона.
     &r &r

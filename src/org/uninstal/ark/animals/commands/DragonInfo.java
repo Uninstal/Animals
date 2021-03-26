@@ -6,19 +6,18 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.uninstal.ark.animals.data.AnimalTamedDragon;
 import org.uninstal.ark.animals.data.AnimalsManager;
 import org.uninstal.ark.animals.data.abilities.Ability;
+import org.uninstal.ark.animals.util.Values;
 
 public class DragonInfo extends AbstractCommand {
 
 	public DragonInfo(int minArgs) {
 		super(minArgs);
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	@Override
 	public void run(CommandSender sender, String[] args) {
 		
@@ -39,25 +38,27 @@ public class DragonInfo extends AbstractCommand {
 			int z = location.getBlockZ();
 			
 			//Здоровье дракона
-			LivingEntity livingEntity = (LivingEntity) dragon.getEntity();
-			int health = (int) livingEntity.getHealth();
-			int maxHealth = (int) livingEntity.getMaxHealth();
+			int health = dragon.getHealth();
+			int maxHealth = 200;
 			
 			//Способности дракона
 			List<Ability> abilities = dragon.getAbilities();
-			String join = String.join(", ", abilities
+			String join = String.join(System.lineSeparator() + " ", 
+					abilities
 					.stream()
-					.map(a -> a.getType().name() + ":" + a.getValue())
+					.map(a -> a.toString())
 					.collect(Collectors.toList()));
 
-			sender.sendMessage("");
-			sender.sendMessage("§dDragon:");
-			sender.sendMessage("Location: " + x + " " + y + " " + z);
-			sender.sendMessage("Health: " + health + "/" + maxHealth);
-			sender.sendMessage("Level: " + level);
-			sender.sendMessage("§1Abilities: §f" + join);
-			sender.sendMessage("");
+			String message = Values.DRAGON_INFO
+					.replace("<x>", String.valueOf(x))
+					.replace("<y>", String.valueOf(y))
+					.replace("<z>", String.valueOf(z))
+					.replace("<hp>", String.valueOf(health))
+					.replace("<max-hp>", String.valueOf(maxHealth))
+					.replace("<level>", String.valueOf(level))
+					.replace("<abilities>", join);
 			
+			sender.sendMessage(message);
 			return;
 		}
 	}

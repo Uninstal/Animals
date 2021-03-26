@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.uninstal.ark.animals.data.AnimalsManager;
@@ -37,6 +38,11 @@ public class DragonTrade extends AbstractCommand {
 			
 			trades.put(target, uuid);
 			sender.sendMessage("§aЗапрос отправлен!");
+			
+			Player player2 = Bukkit.getPlayer(target);
+			if(player2 != null) player2.sendMessage("§aВам пришел запрос на обмен драконами с Uninstal, "
+					+ "чтобы принять используйте §e/dragon accept§a.");
+			
 			return;
 		}
 		

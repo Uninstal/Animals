@@ -21,8 +21,8 @@ public class AnimalsManager {
 	private static Map<UUID, AnimalNonTamed> non_tamed = new HashMap<>();
 	
 	public static boolean isTame(UUID animal) {
-		return !tamed_def.containsKey(animal) 
-				&& !dragons.containsKey(animal);
+		return tamed_def.containsKey(animal) 
+				|| dragons.containsKey(animal);
 	}
 	
 	public static boolean isDragon(UUID animal) {
@@ -33,8 +33,14 @@ public class AnimalsManager {
 		return non_tamed.get(animal);
 	}
 	
-	public static AnimalTamedDefault getAnimal(UUID animal) {
+	public static AnimalTamedDefault getAnimalDefault(UUID animal) {
 		return tamed_def.get(animal);
+	}
+	
+	public static Animal getAnimal(UUID animal) {
+		return tamed_def.containsKey(animal)
+				? tamed_def.get(animal)
+				: dragons.getValueFromKey1(animal);
 	}
 	
 	public static AnimalTamedDragon getDragon(UUID animal) {
@@ -58,11 +64,11 @@ public class AnimalsManager {
 	}
 
 	public static void delete(AnimalNonTamed o) {
-		non_tamed.remove(o.getOwner());
+		non_tamed.remove(o.getEntityId());
 	}
 	
 	public static void delete(AnimalTamedDefault o) {
-		tamed_def.remove(o.getOwner());
+		tamed_def.remove(o.getEntityId());
 	}
 	
 	public static void delete(AnimalTamedDragon o) {
@@ -125,7 +131,7 @@ public class AnimalsManager {
 		for(Animal animal : getTamedAnimals()) {
 			
 			if(animal.getOwner().equals(owner)) animals.add(animal);
-			else if(arkClan
+			else if(arkClan != null && arkClan
 					.full()
 					.stream()
 					.map(u -> u.getUsername())

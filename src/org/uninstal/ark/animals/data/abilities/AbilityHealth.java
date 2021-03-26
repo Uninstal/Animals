@@ -19,6 +19,10 @@ public class AbilityHealth extends Ability {
 		this.boost = boost;
 	}
 
+	public String toBoostKey() {
+		return "health:" + boost;
+	}
+	
 	@Override
 	public AbilityType getType() {
 		return AbilityType.HEALTH;
@@ -31,6 +35,6 @@ public class AbilityHealth extends Ability {
 	
 	@Override
 	public String toString() {
-		return "health:" + boost;
+		return "health:+" + ((int) ((Double) getValue()).doubleValue());
 	}
 }

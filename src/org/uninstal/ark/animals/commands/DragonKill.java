@@ -25,7 +25,7 @@ public class DragonKill extends AbstractCommand {
 		
 		Player player = (Player) sender;
 		UUID uuid = player.getUniqueId();
-
+		
 		AnimalTamedDragon dragon = AnimalsManager.getDragonOwned(uuid);
 		if(dragon == null) sender.sendMessage("§cУ вас нет дракона.");
 		else dragon.kill();

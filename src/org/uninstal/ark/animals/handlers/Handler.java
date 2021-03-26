@@ -7,11 +7,14 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -19,6 +22,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.uninstal.ark.animals.Main;
+import org.uninstal.ark.animals.data.Animal;
 import org.uninstal.ark.animals.data.AnimalNonTamed;
 import org.uninstal.ark.animals.data.AnimalTamedDefault;
 import org.uninstal.ark.animals.data.AnimalTamedDragon;
@@ -51,18 +55,28 @@ public class Handler implements Listener {
 		}
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void damageTameAnimal(EntityDamageByEntityEvent e) {
 		
 		Entity entity = e.getEntity();
 		Entity damager = e.getDamager();
 		
-		if(damager.getType() == EntityType.PLAYER) {
+		if(e.getEntityType() != EntityType.PLAYER
+				&& (damager.getType() == EntityType.PLAYER
+				|| damager.getType() == EntityType.ARROW)) {
+			if(!AnimalsManager.isTame(entity.getUniqueId())) return;
 			
-			AnimalTamedDefault a = AnimalsManager.getAnimal(entity.getUniqueId());
-			if(a == null || a.getOwner() != damager.getUniqueId()) return;
+			Animal animal = AnimalsManager.getAnimal(entity.getUniqueId());
+			UUID owner = damager.getType() == EntityType.PLAYER 
+					? damager.getUniqueId() 
+					: ((Player) ((Projectile) damager)
+					.getShooter()).getUniqueId();
 			
-			e.setCancelled(true);
+			if(!animal
+					.getOwner()
+					.equals(owner)) return;
+			else e.setCancelled(true);
+			
 			return;
 		}
 	}
@@ -89,9 +103,13 @@ public class Handler implements Listener {
 		}
 		
 		else {
-			e.setCancelled(true);
 			
 			if(e.getHand() == EquipmentSlot.HAND) {
+				
+				String type = entity.getType().name().toLowerCase();
+				Material eat = Values.EATS.get(type);
+				
+				if(!Values.EATS.containsKey(type)) return;
 				
 				String groupName = Main.getPermission().getPrimaryGroup(player);
 				int limit = Values.LIMITS.containsKey(groupName) 
@@ -106,8 +124,6 @@ public class Handler implements Listener {
 					return;
 				}
 				
-				String type = entity.getType().name().toLowerCase();
-				Material eat = Values.EATS.get(type);
 				
 				if(eat != null && e.getHand() == EquipmentSlot.HAND) {
 					
@@ -131,28 +147,72 @@ public class Handler implements Listener {
 		
 		Entity entity = e.getEntity();
 		UUID animal = entity.getUniqueId();
-		boolean delete = false;
 		
 		AnimalNonTamed a = AnimalsManager.getNonTamedAnimal(animal);
-		if(a != null) {
-			AnimalsManager.delete(a);
-			delete = true;
-		}
+		if(a != null) AnimalsManager.delete(a);
 		
-		AnimalTamedDefault a2 = AnimalsManager.getAnimal(animal);
-		if(a2 != null) {
-			AnimalsManager.delete(a2);
-			delete = true;
-		}
+		AnimalTamedDefault a2 = AnimalsManager.getAnimalDefault(animal);
+		if(a2 != null) AnimalsManager.delete(a2);
 		
 		AnimalTamedDragon a3 = AnimalsManager.getDragon(animal);
-		if(a3 != null) {
-			AnimalsManager.delete(a3);
-			delete = true;
+		if(a3 != null) AnimalsManager.delete(a3);
+		
+		return;
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+	public void onEntityDamage(EntityDamageByEntityEvent e) {
+		
+		Entity entity = e.getEntity();
+		Entity target = e.getDamager();
+		
+		if(e.getEntityType() == EntityType.PLAYER) {
+			
+			Animal animal = AnimalsManager.getAnimal(target.getUniqueId());
+			if(animal == null) return;
+			
+			UUID animalOwner = animal.getOwner();
+			UUID player = entity.getUniqueId();
+			
+			if(animalOwner.equals(player)) e.setCancelled(true);
+			else return;
 		}
 		
-		if(delete) System.out.println("Entity " + entity.getType().name() + " deleted.");
-		return;
+		if(e.getEntityType() == EntityType.ENDER_DRAGON) {
+			
+			if(!AnimalsManager.isDragon(entity.getUniqueId())) return;
+			AnimalTamedDragon dragon = AnimalsManager.getDragon(entity.getUniqueId());
+			
+			int health = dragon.getHealth();
+			health -= (int) e.getFinalDamage();
+			
+			if(health <= 0) dragon.kill();
+			else dragon.setHealth(health);
+			
+			e.setDamage(0D);
+			return;
+		}
+	}
+	
+	@EventHandler
+	public void onTarget(EntityTargetEvent e) {
+		
+		Entity entity = e.getEntity();
+		Entity target = e.getTarget();
+		
+		if(target != null && target.getType() == EntityType.PLAYER) {
+			
+			Animal animal = AnimalsManager.getAnimal(entity.getUniqueId());
+			if(animal == null) return;
+			
+			UUID animalOwner = animal.getOwner();
+			UUID player = target.getUniqueId();
+			
+			if(animalOwner.equals(player))
+				e.setCancelled(true);
+			
+			return;
+		}
 	}
 	
 	@EventHandler

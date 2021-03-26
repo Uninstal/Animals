@@ -33,6 +33,7 @@ public class Values {
 		PASS = config.getString("settings.db.pass");
 		BASE = config.getString("settings.db.base");
 		
+		DRAGON_INFO = config.getString("messages.dragon-info").replace("&", "§");
 		COOLDOWN = config.getString("messages.cooldown").replace("&", "§");
 		LIMIT = config.getString("messages.limit").replace("&", "§");
 		TAME = config.getString("messages.tame").replace("&", "§");
@@ -103,6 +104,7 @@ public class Values {
 	public static String PASS;
 	public static String BASE;
 	
+	public static String DRAGON_INFO;
 	public static String COOLDOWN;
 	public static String LIMIT;
 	public static String INFO;

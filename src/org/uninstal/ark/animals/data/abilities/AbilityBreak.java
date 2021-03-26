@@ -19,6 +19,10 @@ public class AbilityBreak extends Ability {
 		this.boost = boost;
 	}
 
+	public String toBoostKey() {
+		return "break:" + boost;
+	}
+
 	@Override
 	public AbilityType getType() {
 		return AbilityType.BREAK;
@@ -31,6 +35,6 @@ public class AbilityBreak extends Ability {
 	
 	@Override
 	public String toString() {
-		return "break:" + boost;
+		return "break:" + ((Integer) getValue()).intValue();
 	}
 }

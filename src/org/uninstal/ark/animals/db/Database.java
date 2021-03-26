@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.uninstal.ark.animals.Main;
 
 public class Database {
 
@@ -41,10 +42,22 @@ public class Database {
 	        Bukkit.getConsoleSender().sendMessage("[ARKAnimals] §a§lDatabase successfully connected!");
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			
+			Bukkit.getConsoleSender().sendMessage("[ARKAnimals] §c§lDatabase is null, check data in config.yml.");
+			Bukkit.getPluginManager().disablePlugin(Main.getPlugin(Main.class));
+			
+			return;
 		}
 		
         return;
+	}
+	
+	public void dropTable(String tableName) {
+		
+		String sqlCommand = "DROP TABLE " + tableName;
+		send(sqlCommand);
+		
+		return;
 	}
 	
 	/*
@@ -80,6 +93,10 @@ public class Database {
 	
 	public Connection getConnection() {
 		return connection;
+	}
+	
+	public boolean isConnected() {
+		return connection != null;
 	}
 	
 	public String getPassword() {

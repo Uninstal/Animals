@@ -12,6 +12,7 @@ public abstract class Ability {
 		return intersectionable;
 	}
 	
+	public abstract String toBoostKey();
 	public abstract AbilityType getType();
 	public abstract Object getValue();
 }

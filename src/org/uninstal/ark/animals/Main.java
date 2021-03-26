@@ -11,11 +11,15 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.uninstal.ark.animals.commands.AbstractCommand;
 import org.uninstal.ark.animals.commands.DragonAccept;
+import org.uninstal.ark.animals.commands.DragonGet;
 import org.uninstal.ark.animals.commands.DragonInfo;
 import org.uninstal.ark.animals.commands.DragonKill;
 import org.uninstal.ark.animals.commands.DragonTp;
+import org.uninstal.ark.animals.commands.DragonTrade;
 import org.uninstal.ark.animals.commands.MobsGive;
 import org.uninstal.ark.animals.commands.MobsList;
+import org.uninstal.ark.animals.commands.MobsNick;
+import org.uninstal.ark.animals.commands.MobsPair;
 import org.uninstal.ark.animals.data.AnimalsManager;
 import org.uninstal.ark.animals.db.Database;
 import org.uninstal.ark.animals.db.Operator;
@@ -53,19 +57,23 @@ public class Main extends JavaPlugin {
 			
 			//Database
 			Database db = new Database(Values.HOST, Values.BASE, Values.USER, Values.PASS);
-			this.operator = new Operator(db);
+			if(!db.isConnected()) return;
 			
+			this.operator = new Operator(db);
 			db.createTable(Operator.table_tamed_dragons,
 					"animal VARCHAR(36) PRIMARY KEY",
 					"owner VARCHAR(36)",
 					"level INT",
 					"baby BOOL",
-					"abilities TEXT");
+					"abilities TEXT",
+					"health INT",
+					"nick TEXT");
 			
 			db.createTable(Operator.table_tamed_animals, 
 					"animal VARCHAR(36) PRIMARY KEY",
 					"owner VARCHAR(36)",
-					"level INT");
+					"level INT",
+					"nick TEXT");
 			
 			db.createTable(Operator.table_taming_animals, 
 					"animal VARCHAR(36) PRIMARY KEY",
@@ -81,17 +89,19 @@ public class Main extends JavaPlugin {
 			
 			//Register events
 			Bukkit.getPluginManager().registerEvents(new Handler(), this);
-			Bukkit.getPluginManager().registerEvents(new AbilityHandler(), this);
+			Bukkit.getPluginManager().registerEvents(new AbilityHandler(this), this);
 			
 			//Commands
 			this.commands.put("mobs list", new MobsList(1));
 			this.commands.put("mobs give", new MobsGive(2));
+			this.commands.put("mobs pair", new MobsPair(1));
+			this.commands.put("mobs nick", new MobsNick(2));
 			this.commands.put("dragon accept", new DragonAccept(1));
 			this.commands.put("dragon info", new DragonInfo(1));
 			this.commands.put("dragon kill", new DragonKill(1));
 			this.commands.put("dragon tp", new DragonTp(1));
-			this.commands.put("dragon trade", new DragonAccept(2));
-			this.commands.put("dragon get", new DragonAccept(1));
+			this.commands.put("dragon trade", new DragonTrade(2));
+			this.commands.put("dragon get", new DragonGet(1));
 			
 		} catch (Exception e) {
 			
@@ -106,6 +116,8 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		
+		if(operator == null) return;
 		this.operator.save();
 	}
 	

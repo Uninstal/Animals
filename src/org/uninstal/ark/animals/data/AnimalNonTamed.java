@@ -16,6 +16,7 @@ public class AnimalNonTamed implements Animal {
 		
 		this.entity = entity;
 		this.owner = owner;
+		this.updateDisplayName();
 	}
 
 	public AnimalNonTamed(Entity entity, UUID owner, int progress) {
@@ -23,6 +24,7 @@ public class AnimalNonTamed implements Animal {
 		this.entity = entity;
 		this.owner = owner;
 		this.progress = progress;
+		this.updateDisplayName();
 	}
 	
 	public int getNeedEatAmount() {
@@ -82,5 +84,17 @@ public class AnimalNonTamed implements Animal {
 	@Override
 	public void setOwner(UUID owner) {
 		this.owner = owner;
+	}
+
+	@Override
+	public void setDisplayName(String displayName) {
+		//code...
+	}
+
+	@Override
+	public void updateDisplayName() {
+
+		this.entity.setCustomName(getDisplayName());
+		this.entity.setCustomNameVisible(true);
 	}
 }

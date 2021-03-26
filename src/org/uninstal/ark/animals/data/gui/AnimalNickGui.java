@@ -14,24 +14,26 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 import org.uninstal.ark.animals.data.Animal;
 import org.uninstal.ark.animals.data.AnimalsManager;
-import org.uninstal.ark.animals.util.Values;
 
-public class AnimalGiveGui implements Gui {
-
-	private Map<Integer, Animal> animals = new HashMap<>();
+public class AnimalNickGui implements Gui {
 	
+	private String nick;
 	private Player player;
+	private UUID uuid;
 	private boolean open;
+	
 	private Inventory inventory;
-	private UUID newOwner;
+	private Map<Integer, Animal> animals;
 
-	public AnimalGiveGui(Player player, UUID newOwner) {
+	public AnimalNickGui(Player player, String nick) {
+		
+		this.animals = new HashMap<>();
+		this.nick = nick.replace("&", "§");
 		this.player = player;
-		this.newOwner = newOwner;
+		this.uuid = player.getUniqueId();
 		this.open = false;
 		
-		guis.put(player.getUniqueId(), 
-				this);
+		guis.put(uuid, this);
 	}
 	
 	@Override
@@ -41,7 +43,6 @@ public class AnimalGiveGui implements Gui {
 		
 		for(Animal a : AnimalsManager
 				.getTamedAnimals(player.getUniqueId())) {
-			if(AnimalsManager.isDragon(a.getEntityId())) continue;
 			
 			ItemStack stack = new ItemStack(Material.MONSTER_EGG);
 			SpawnEggMeta meta = (SpawnEggMeta) stack.getItemMeta();
@@ -64,21 +65,25 @@ public class AnimalGiveGui implements Gui {
 
 	@Override
 	public void click(InventoryClickEvent e) {
+		e.setCancelled(true);
+		
+		if(e.getClickedInventory() == null
+				|| !e.getClickedInventory().equals(inventory)
+				|| e.getCurrentItem().getType() == Material.AIR)
+			return;
 		
 		int slot = e.getSlot();
-		if(!animals.containsKey(slot)) return;
+		Animal animal = animals.get(slot);
 		
-		Animal a = animals.get(slot);
-		a.setOwner(newOwner);
+		animal.setDisplayName("§f" + nick);
+		animal.updateDisplayName();
 		
-		player.sendMessage(Values.GIVE);
 		player.closeInventory();
-		
 		return;
 	}
 
 	@Override
 	public void close(InventoryCloseEvent e) {
-		if(open) guis.remove(player.getUniqueId());
+		if(open) guis.remove(uuid);
 	}
 }

@@ -63,10 +63,14 @@ public class AnimalEggGui implements Gui {
 		Player player = (Player) e.getWhoClicked();
 		Material type = Values.EATS.get("dragon");
 		
-		if(e.getClickedInventory() == inventory
-				&& e.getCurrentItem().getType() == Material.STAINED_GLASS_PANE) e.setCancelled(true);
+		if(e.getClickedInventory() != null
+				&& e.getClickedInventory().equals(inventory)
+				&& e.getCurrentItem() != null
+				&& e.getCurrentItem().getType() 
+				== Material.STAINED_GLASS_PANE) 
+			e.setCancelled(true);
 		
-		else new BukkitRunnable() {
+		new BukkitRunnable() {
 			
 			@Override
 			public void run() {
@@ -92,8 +96,9 @@ public class AnimalEggGui implements Gui {
 				ItemStack curr = inventory.getItem(4);
 				curr.setAmount(curr.getAmount() - 1);
 				
+				int amount = Values.AMOUNTS.getOrDefault("dragon", 1);
 				EnderDragonTame tame = (EnderDragonTame) Values.TAMES.get("dragon");
-				tame.updateTame(player, loc, tame.progresses.getOrDefault(loc, 0) + 50);
+				tame.updateTame(player, loc, EnderDragonTame.progresses.getOrDefault(loc, 0) + amount);
 				
 				cooldowns.put(loc, System.currentTimeMillis() + Values.COOLDOWNS.get("dragon") * 1000);
 				return;
@@ -106,7 +111,7 @@ public class AnimalEggGui implements Gui {
 	public void close(InventoryCloseEvent e) {
 		
 		ItemStack curr = inventory.getItem(4);
-		if(curr != null) loc.getWorld().dropItem(loc.add(0.0, 1.0, 0.0), curr);
+		if(curr != null) loc.getWorld().dropItem(loc.clone().add(0.0, 1.0, 0.0), curr);
 		
 		if(open) guis.remove(uuid);
 	}

@@ -30,11 +30,14 @@ public class DragonAccept extends AbstractCommand {
 		
 		if(owner != null) {
 			
-			AnimalTamedDragon dragon1 = AnimalsManager.getDragon(uuid);
-			AnimalTamedDragon dragon2 = AnimalsManager.getDragon(owner);
+			AnimalTamedDragon dragon1 = AnimalsManager.getDragonOwned(uuid);
+			AnimalTamedDragon dragon2 = AnimalsManager.getDragonOwned(owner);
 			
-			dragon1.setOwner(dragon2.getOwner());
-			dragon2.setOwner(dragon1.getOwner());
+			dragon1.setOwner(owner);
+			dragon2.setOwner(uuid);
+			
+			AnimalsManager.add(dragon1);
+			AnimalsManager.add(dragon2);
 			
 			sender.sendMessage("§aВы успешно обменялись драконами!");
 			if(Bukkit.getPlayer(owner) != null) Bukkit.getPlayer(owner)

@@ -16,9 +16,9 @@ public class Operator {
 	public static String table_tamed_dragons = "ark_tamed_dragons";
 	public static String table_taming_animals = "ark_taming_animals";
 	public static String table_tamed_animals = "ark_tamed_animals";
-	public static String types_tamed_dragons = "animal, owner, level, baby, abilities";
+	public static String types_tamed_dragons = "animal, owner, level, baby, abilities, health, nick";
+	public static String types_tamed_animals = "animal, owner, level, nick";
 	public static String types_taming_animals = "animal, owner, progress";
-	public static String types_tamed_animals = "animal, owner, level";
 	
 	public Operator(Database db) {
 		this.db = db;
@@ -37,12 +37,15 @@ public class Operator {
 				UUID animal = UUID.fromString(dragons.getString(1));
 				UUID owner = UUID.fromString(dragons.getString(2));
 				int level = dragons.getInt(3);
+				boolean baby = dragons.getBoolean(4);
 				String abilities = dragons.getString(5);
+				int health = dragons.getInt(6);
+				String nick = dragons.getString(7);
 				
 				Entity entity = searchEntity(animal);
 				if(entity == null) continue;
 				
-				AnimalTamedDragon a = new AnimalTamedDragon(entity, owner, level);
+				AnimalTamedDragon a = new AnimalTamedDragon(entity, owner, level, baby, health, nick);
 				a.setAbilities(abilities);
 				
 				AnimalsManager.add(a);
@@ -54,11 +57,12 @@ public class Operator {
 				UUID animal = UUID.fromString(tamed.getString(1));
 				UUID owner = UUID.fromString(tamed.getString(2));
 				int level = tamed.getInt(3);
+				String nick = tamed.getString(4);
 				
 				Entity entity = searchEntity(animal);
 				if(entity == null) continue;
 				
-				AnimalTamedDefault a = new AnimalTamedDefault(entity, owner, level);
+				AnimalTamedDefault a = new AnimalTamedDefault(entity, owner, level, nick);
 				AnimalsManager.add(a);
 				
 				continue;
@@ -98,9 +102,11 @@ public class Operator {
 			String animal = "'" + a.getEntity().getUniqueId().toString() + "'";
 			String owner = "'" + a.getOwner().toString() + "'";
 			String abilities = "'" + a.hashAbilities() + "'";
+			String nick = "'" + a.getDisplayName() + "'";
 			int level = a.getLevel();
+			int health = a.getHealth();
 			
-			String values = animal + ", " + owner + ", " + level + ", false, " + abilities;
+			String values = animal + ", " + owner + ", " + level + ", false, " + abilities + ", " + health + ", " + nick;
 			
 			db.send("INSERT INTO " + table_tamed_dragons + " (" + 
 			types_tamed_dragons + ") VALUES (" + values + ")");
@@ -112,9 +118,10 @@ public class Operator {
 			
 			String animal = "'" + a.getEntity().getUniqueId().toString() + "'";
 			String owner = "'" + a.getOwner().toString() + "'";
+			String nick = "'" + a.getDisplayName() + "'";
 			int level = a.getLevel();
 			
-			String values = animal + ", " + owner + ", " + level;
+			String values = animal + ", " + owner + ", " + level + ", " + nick;
 			
 			db.send("INSERT INTO " + table_tamed_animals + " (" + 
 			types_tamed_animals + ") VALUES (" + values + ")");

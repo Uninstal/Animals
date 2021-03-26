@@ -12,13 +12,36 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.uninstal.ark.animals.Main;
 
 public class Utils {
 	
 	private static Random rand = new Random();
 	
+	public static String join(String[] texts, int arg0) {
+		StringBuilder builder = new StringBuilder();
+		
+		for(int i = arg0; i < texts.length; i++) {
+			builder.append(texts[i]);
+			if((i + 1) != texts.length)
+				builder.append(" ");
+			
+			continue;
+		}
+		
+		return builder.toString();
+	}
+	
 	public static int random(int start, int end) {
 		return rand.nextInt(end) + start;
+	}
+	
+	public static void sync(Runnable run) {
+		Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), run, 1L);
+	}
+	
+	public static void syncLater(Runnable run, long delay) {
+		Bukkit.getScheduler().runTaskLater(Main.getPlugin(Main.class), run, delay);
 	}
 	
 	public static Block searchEmptyBlockNearby(Entity entity) {
