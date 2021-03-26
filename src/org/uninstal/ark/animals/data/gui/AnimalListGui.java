@@ -30,6 +30,7 @@ public class AnimalListGui implements Gui {
 		
 		this.inventory = Bukkit.createInventory(null, 6*9, "Питомцы");
 		
+		int k = 0;
 		for(Animal a : AnimalsManager
 				.getClanAnimals(player.getUniqueId())) {
 			
@@ -39,7 +40,9 @@ public class AnimalListGui implements Gui {
 			meta.setSpawnedType(a.getEntity().getType());
 			stack.setItemMeta(meta);
 			
-			this.inventory.addItem(stack);
+			this.inventory.setItem(k, stack);
+			
+			k++;
 			continue;
 		}
 		

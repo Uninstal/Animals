@@ -51,7 +51,7 @@ public class AnimalNickGui implements Gui {
 			stack.setItemMeta(meta);
 			
 			this.animals.put(k, a);
-			this.inventory.addItem(stack);
+			this.inventory.setItem(k, stack);
 			
 			k++;
 			continue;
